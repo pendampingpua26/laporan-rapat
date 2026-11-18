@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Laporan Rapat</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#13294b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Laporan Rapat">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#13294b;--slate:#5b6b84;--line:#e3e8f0;--bg:#f4f7fb;--ok:#1f9d62;--warn:#d9a000;--bad:#d64545;--r:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:15px/1.5 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--navy);background:linear-gradient(180deg,#fff 0,var(--bg) 320px) fixed}
+.top{position:sticky;top:0;z-index:5;padding:calc(env(safe-area-inset-top) + 14px) 20px 12px}
+.glass{background:rgba(255,255,255,.74);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.top{border-bottom:1px solid var(--line)}h1{margin:0;font-size:20px;font-weight:800}
+main{padding:16px 16px calc(110px + env(safe-area-inset-bottom));max-width:640px;margin:auto}
+.nav{position:fixed;inset:auto 0 0;z-index:5;display:flex;justify-content:space-around;align-items:center;padding:8px 12px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}
+.nav button{background:none;border:0;font:600 12px inherit;color:var(--slate);padding:6px 18px;min-height:48px}
+.nav button.on{color:var(--navy)}.nav .fab{background:var(--navy);color:#fff;border-radius:999px;padding:14px 22px;font-size:14px;box-shadow:0 8px 24px rgba(19,41,75,.3);margin-top:-22px}
+.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.kpi div{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px}.kpi b{display:block;font-size:26px;line-height:1.1}.kpi span{font-size:12px;color:var(--slate)}
+.pills{display:flex;gap:8px;overflow-x:auto;margin:10px 0}.pill{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 16px;font:600 13px inherit;color:var(--slate)}.pill.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+input,textarea{width:100%;font:inherit;color:inherit;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:13px 14px;outline:0}
+input:focus,textarea:focus{border-color:var(--navy)}textarea{min-height:110px;resize:vertical}label{display:block;font-weight:600;font-size:13px;margin:14px 0 6px}
+.card{background:#fff;border:1px solid var(--line);border-left:6px solid var(--slate);border-radius:var(--r);padding:14px;margin-bottom:12px;animation:in .25s}
+.card.Selesai{border-left-color:var(--ok)}.card.Draft{border-left-color:var(--warn)}.card.Belum{border-left-color:var(--bad)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.card h3{margin:0 0 4px;font-size:15px}.meta{color:var(--slate);font-size:13px}
+.badge{float:right;font:700 11px inherit;padding:4px 10px;border-radius:99px;margin:0 0 6px 8px;color:#fff;background:var(--bad)}.Selesai .badge{background:var(--ok)}.Draft .badge{background:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{border:0;border-radius:12px;padding:13px 18px;font:700 14px inherit;background:var(--navy);color:#fff;min-height:48px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.btn.ghost{background:#eef2f8;color:var(--navy)}.btn.wa{background:#1fa855}.btn.red{background:var(--bad)}.btn.sm{min-height:40px;padding:9px 14px;font-size:13px}.btn.full{width:100%;margin-top:10px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;font:600 12px inherit;color:var(--slate)}.chip.on{background:#e6f6ee;border-color:var(--ok);color:var(--ok)}
+.steps{display:flex;gap:6px;margin:4px 0 14px}.steps i{flex:1;height:5px;border-radius:9px;background:var(--line)}.steps i.on{background:var(--navy)}
+.empty{text-align:center;color:var(--slate);padding:48px 16px}.empty b{display:block;color:var(--navy);font-size:17px;margin-bottom:4px}
+.files{font-size:13px;color:var(--slate);margin-top:6px}.files span{display:inline-block;background:#eef2f8;border-radius:8px;padding:4px 8px;margin:3px 4px 0 0}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(19,41,75,.45);display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}.ov.on{display:flex}
+.box{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:340px;text-align:center}
+.spin{width:34px;height:34px;border:4px solid var(--line);border-top-color:var(--navy);border-radius:50%;margin:0 auto 12px;animation:r .8s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:30;background:var(--navy);color:#fff;border-radius:14px;padding:13px 16px;font-weight:600;opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none}.toast.on{opacity:1;transform:none}.toast.err{background:var(--bad)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top glass"><h1 id="ttl">Laporan Rapat</h1></header>
+<main id="v"></main>
+<nav class="nav glass">
+  <button data-t="mon">Monitoring</button><button class="fab" data-t="new">+ Buat Laporan</button><button data-t="his">Riwayat</button>
+</nav>
+<div class="ov" id="busy"><div class="box"><div class="spin"></div><b id="busyT">Memproses…</b></div></div>
+<div class="ov" id="ask"><div class="box"><b id="askT"></b><div class="row" style="justify-content:center"><button class="btn ghost" id="askN">Batal</button><button class="btn red" id="askY">Ya, hapus</button></div></div></div>
+<div class="ov" id="pin"><div class="box"><b>Masukkan PIN akses</b><input id="pinI" type="password" inputmode="numeric" placeholder="PIN" style="margin:12px 0"><button class="btn full" id="pinB">Masuk</button></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const API='GANTI_URL_WEB_APP_APPS_SCRIPT';
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STEPS=[['Info rapat',[['acara','Acara','text',1],['tanggal','Hari/tanggal pelaksanaan','date',1],['waktu','Waktu rapat','text'],['tempat','Tempat rapat','text'],['pimpinan','Pimpinan rapat','text'],['penyelenggara','Penyelenggara rapat','text']]],
+ ['Surat',[['tujuan','Tujuan surat','text'],['dari','Dari surat','text'],['disposisi','Penerima disposisi','textarea']]],
+ ['Isi laporan',[['latar','Latar belakang','textarea'],['bahas','Pembahasan','textarea'],['simpul','Kesimpulan dan tindak lanjut','textarea']]],
+ ['Lampiran',null]];
+const UP=[['fotoUndangan','Foto undangan','image/*'],['fotoRapat','Foto pelaksanaan rapat','image/*'],['dokumen','Dokumen lainnya (opsional)','*/*']];
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const blank=()=>({row:'',monRow:'',tanggal:today(),selesai:false,files:{fotoUndangan:[],fotoRapat:[],dokumen:[]},existing:{}});
+let S={tab:'mon',mon:[],his:[],filter:'Semua',q:'',f:blank(),step:0,res:null};
+
+async function api(action,data={}){
+  const r=await fetch(API,{method:'POST',body:JSON.stringify({action,pin:localStorage.pin||'',...data})}),j=await r.json();
+  if(!j.ok){if(/PIN/.test(j.pesan)){localStorage.removeItem('pin');$('#pin').classList.add('on');}throw new Error(j.pesan);}return j.data;}
+function busy(t){$('#busyT').textContent=t||'';$('#busy').classList.toggle('on',!!t)}
+let tt;function toast(m,err){const e=$('#toast');e.textContent=m;e.className='toast on'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>e.className='toast',3500)}
+function confirmBox(t){return new Promise(ok=>{$('#askT').textContent=t;$('#ask').classList.add('on');$('#askY').onclick=()=>{$('#ask').classList.remove('on');ok(true)};$('#askN').onclick=()=>{$('#ask').classList.remove('on');ok(false)}})}
+const fd=i=>i?new Date(i+'T00:00').toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'}):'Tanggal belum diisi';
+const empty=(t,s)=>`<div class="empty"><b>${t}</b>${s}</div>`;
+
+function nav(t){S.tab=t;if(t==='new'&&!S.res){}document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  $('#ttl').textContent={mon:'Monitoring laporan',new:S.f.row?'Edit laporan':'Buat laporan',his:'Riwayat laporan'}[t];window.scrollTo(0,0);
+  if(t==='mon')loadMon();else if(t==='his')loadHis();else draw();}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{if(b.dataset.t==='new'){S.f=blank();S.step=0;S.res=null}nav(b.dataset.t)});
+
+async function loadMon(){drawMon();try{busy('Memuat data…');S.mon=(await api('monitor')).items;}catch(e){toast(e.message,1)}finally{busy()}drawMon()}
+async function loadHis(){try{busy('Memuat riwayat…');S.his=(await api('history')).items;}catch(e){toast(e.message,1)}finally{busy()}drawHis()}
+function draw(){S.tab==='mon'?drawMon():S.tab==='his'?drawHis():S.res?drawRes():drawForm()}
+
+function drawMon(){
+  const m=S.mon,c=s=>m.filter(x=>x.status===s).length;
+  $('#v').innerHTML=`<div class="kpi"><div><b>${m.length}</b><span>Total rapat</span></div><div><b style="color:var(--ok)">${c('Selesai')}</b><span>Laporan selesai</span></div><div><b style="color:var(--bad)">${c('Belum Dibuat')+c('Draft')}</b><span>Belum / pending</span></div></div>
+  <input id="q" type="search" placeholder="Cari acara, tanggal, atau penyelenggara" value="${esc(S.q)}">
+  <div class="pills">${['Semua','Selesai','Draft','Belum Dibuat'].map(f=>`<button class="pill ${S.filter===f?'on':''}" data-f="${f}">${f}</button>`).join('')}</div><div id="list"></div>`;
+  $('#q').oninput=e=>{S.q=e.target.value;list()};document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{S.filter=b.dataset.f;drawMon()});list()}
+function list(){
+  const q=S.q.toLowerCase(),a=S.mon.filter(x=>(S.filter==='Semua'||x.status===S.filter)&&(!q||[x.kegiatan,x.penyelenggara,x.tanggal,fd(x.tanggal)].join(' ').toLowerCase().includes(q)));
+  $('#list').innerHTML=a.length?a.map(x=>`<div class="card ${x.status.split(' ')[0]}"><span class="badge">${x.status}</span><h3>${esc(x.kegiatan)}</h3>
+  <div class="meta">${fd(x.tanggal)}<br>${esc(x.penyelenggara)}${x.ket?'<br><i>'+esc(x.ket)+'</i>':''}</div>
+  <div class="row">${[['laporan','Laporan'],['kabid','Kabid'],['kaban','Kaban'],['spj','SPJ']].map(([k,l])=>`<button class="chip ${x[k]?'on':''}" data-r="${x.row}" data-k="${k}">${x[k]?'✓ ':''}${l}</button>`).join('')}</div>
+  <div class="row"><button class="btn sm" data-mk="${x.row}">${x.laporanUrl?'Edit laporan':'Buat laporan'}</button>${x.laporanUrl?`<a class="btn sm ghost" href="${esc(x.laporanUrl)}" target="_blank">PDF</a>`:''}${x.wa?`<a class="btn sm wa" href="${esc(x.wa)}" target="_blank">WhatsApp</a>`:''}</div></div>`).join('')
+  :empty('Tidak ada rapat','Ubah filter atau kata kunci pencarian.');
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=async()=>{const x=S.mon.find(i=>i.row==b.dataset.r),k=b.dataset.k;x[k]=!x[k];x.status=x.laporan?'Selesai':(x.laporanUrl?'Draft':'Belum Dibuat');drawMon();
+    try{await api('setCheck',{monRow:x.row,field:k.toUpperCase(),value:x[k]});toast('Status diperbarui')}catch(e){x[k]=!x[k];toast(e.message,1);drawMon()}});
+  document.querySelectorAll('[data-mk]').forEach(b=>b.onclick=async()=>{const x=S.mon.find(i=>i.row==b.dataset.mk);
+    let h=x.laporanUrl?S.his.find(i=>i.pdf===x.laporanUrl):null;
+    if(x.laporanUrl&&!h){try{busy('Membuka laporan…');S.his=(await api('history')).items;h=S.his.find(i=>i.pdf===x.laporanUrl)}catch(e){toast(e.message,1)}finally{busy()}}
+    S.f=h?{...blank(),...h,monRow:x.row,selesai:x.laporan}:{...blank(),monRow:x.row,acara:x.kegiatan,tanggal:x.tanggal||today(),penyelenggara:x.penyelenggara,disposisi:x.disposisi,selesai:x.laporan};
+    S.step=0;S.res=null;nav('new')})}
+
+function drawHis(){
+  $('#v').innerHTML=S.his.length?S.his.map(x=>`<div class="card"><h3>${esc(x.acara)}</h3><div class="meta">${fd(x.tanggal)}<br>${esc(x.penyelenggara)}</div>
+  <div class="row"><button class="btn sm" data-e="${x.row}">Edit</button>${x.pdf?`<a class="btn sm ghost" href="${esc(x.pdf)}" target="_blank">PDF</a>`:''}${x.gdocs?`<a class="btn sm ghost" href="${esc(x.gdocs)}" target="_blank">Word</a>`:''}<button class="btn sm red" data-d="${x.row}">Hapus</button></div></div>`).join('')
+  :empty('Belum ada laporan','Laporan yang kamu buat akan muncul di sini.');
+  document.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{S.f={...blank(),...S.his.find(i=>i.row==b.dataset.e)};S.step=0;S.res=null;nav('new')});
+  document.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{if(!await confirmBox('Hapus laporan ini beserta file PDF dan Word-nya?'))return;
+    try{busy('Menghapus…');await api('remove',{row:b.dataset.d});toast('Laporan dihapus');await loadHis()}catch(e){toast(e.message,1)}finally{busy()}})}
+
+function drawForm(){
+  const f=S.f,[t,fl]=STEPS[S.step],last=S.step===STEPS.length-1;
+  let h=`<div class="steps">${STEPS.map((_,i)=>`<i class="${i<=S.step?'on':''}"></i>`).join('')}</div><h2 style="margin:0 0 4px;font-size:18px">${S.step+1}. ${t}</h2>`;
+  if(fl)h+=fl.map(([k,l,ty,req])=>`<label>${l}${req?' *':''}</label>${ty==='textarea'?`<textarea data-k="${k}">${esc(f[k])}</textarea>`:`<input type="${ty}" data-k="${k}" value="${esc(f[k])}">`}`).join('');
+  else h+=UP.map(([k,l,a])=>`<label>${l}</label><input type="file" ${a==='*/*'?'':'accept="'+a+'"'} multiple data-u="${k}">
+    <div class="files">${f.existing&&f.existing[k]?`<span>${f.existing[k]} file tersimpan</span>`:''}${f.files[k].map((x,i)=>`<span>${esc(x.name)} <b data-x="${k}:${i}">×</b></span>`).join('')}</div>`).join('')+
+    `<label style="display:flex;gap:10px;align-items:center;margin-top:20px"><input type="checkbox" style="width:22px;height:22px" id="sel" ${f.selesai?'checked':''}> Tandai laporan sudah selesai</label>`;
+  h+=`<div class="row" style="margin-top:22px">${S.step?'<button class="btn ghost" id="bk">Kembali</button>':''}<button class="btn" id="nx" style="flex:1">${last?'Simpan & buat dokumen':'Lanjut'}</button></div>`;
+  $('#v').innerHTML=h;
+  document.querySelectorAll('[data-k]').forEach(e=>e.oninput=()=>f[e.dataset.k]=e.value);
+  document.querySelectorAll('[data-u]').forEach(e=>e.onchange=async()=>{busy('Menyiapkan file…');try{for(const x of e.files)f.files[e.dataset.u].push(await prep(x))}catch(er){toast(er.message,1)}busy();drawForm()});
+  document.querySelectorAll('[data-x]').forEach(e=>e.onclick=()=>{const[k,i]=e.dataset.x.split(':');f.files[k].splice(i,1);drawForm()});
+  if($('#sel'))$('#sel').onchange=e=>f.selesai=e.target.checked;
+  if($('#bk'))$('#bk').onclick=()=>{S.step--;drawForm()};
+  $('#nx').onclick=()=>{if(!f.acara?.trim()||!f.tanggal){S.step=0;drawForm();return toast('Acara dan tanggal rapat wajib diisi',1)}last?submit():(S.step++,drawForm())}}
+
+function prep(file){return new Promise((ok,no)=>{const r=new FileReader();r.onerror=()=>no(new Error('Gagal membaca file'));
+  if(!file.type.startsWith('image/')){if(file.size>8e6)return no(new Error('Dokumen maksimal 8 MB'));r.onload=()=>ok({name:file.name,mime:file.type||'application/octet-stream',data:r.result.split(',')[1]});return r.readAsDataURL(file)}
+  r.onload=()=>{const im=new Image();im.onerror=()=>no(new Error('Gambar tidak bisa dibaca'));im.onload=()=>{const s=Math.min(1,1280/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;
+    c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok({name:file.name.replace(/\.\w+$/,'')+'.jpg',mime:'image/jpeg',data:c.toDataURL('image/jpeg',.8).split(',')[1]})};im.src=r.result};r.readAsDataURL(file)})}
+
+async function submit(){
+  try{busy('Mengunggah foto & membuat Word/PDF… (bisa 20–60 detik)');S.res=await api('save',S.f);toast('Laporan tersimpan ke Google Sheets');drawRes()}
+  catch(e){toast('Gagal: '+e.message,1)}finally{busy()}}
+function drawRes(){const r=S.res;$('#ttl').textContent='Laporan siap';
+  $('#v').innerHTML=`<div class="card Selesai"><span class="badge">Tersimpan</span><h3>${esc(S.f.acara)}</h3><div class="meta">Dokumen berhasil dibuat dan disimpan ke Google Sheets.</div></div>
+  <a class="btn full" href="${esc(r.docx)}" target="_blank">Unduh / edit Word (.docx)</a><a class="btn full ghost" href="${esc(r.pdf)}" target="_blank">Unduh PDF</a>
+  <a class="btn full wa" href="https://wa.me/?text=${encodeURIComponent(r.waText)}" target="_blank">Kirim ke WhatsApp</a>
+  <button class="btn full ghost" id="done">Selesai</button>`;$('#done').onclick=()=>{S.res=null;nav('mon')}}
+
+$('#pinB').onclick=()=>{localStorage.pin=$('#pinI').value.trim();$('#pin').classList.remove('on');nav(S.tab)};
+$('#pinI').onkeydown=e=>{if(e.key==='Enter')$('#pinB').click()};
+if(!localStorage.pin)$('#pin').classList.add('on');
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+nav('mon');
+</script>
+</body>
+</html>
