@@ -58,8 +58,7 @@ input:focus,textarea:focus{border-color:var(--navy)}textarea{min-height:110px;re
 <div class="ov" id="pin"><div class="box"><b>Masukkan PIN akses</b><input id="pinI" type="password" inputmode="numeric" placeholder="PIN" style="margin:12px 0"><button class="btn full" id="pinB">Masuk</button></div></div>
 <div class="toast" id="toast"></div>
 <script>
-const API='https://script.google.com/macros/s/AKfycbzjd8KF2rFaOzWSBycjTSS424dQVXogsstEDcyjE4GeACZYOq0dxcyAN3p3QD09nSaCXQ/exec
-';
+const API='https://script.google.com/macros/s/AKfycbzjd8KF2rFaOzWSBycjTSS424dQVXogsstEDcyjE4GeACZYOq0dxcyAN3p3QD09nSaCXQ/exec';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const STEPS=[['Info rapat',[['acara','Acara','text',1],['tanggal','Hari/tanggal pelaksanaan','date',1],['waktu','Waktu rapat','text'],['tempat','Tempat rapat','text'],['pimpinan','Pimpinan rapat','text'],['penyelenggara','Penyelenggara rapat','text']]],
  ['Surat',[['tujuan','Tujuan surat','text'],['dari','Dari surat','text'],['disposisi','Penerima disposisi','textarea']]],
@@ -71,7 +70,9 @@ const blank=()=>({row:'',monRow:'',tanggal:today(),selesai:false,files:{fotoUnda
 let S={tab:'mon',mon:[],his:[],filter:'Semua',q:'',f:blank(),step:0,res:null};
 
 async function api(action,data={}){
-  const r=await fetch(API,{method:'POST',body:JSON.stringify({action,pin:localStorage.pin||'',...data})}),j=await r.json();
+  if(/GANTI_URL/.test(API))throw new Error('Alamat API di index.html belum diganti dengan URL /exec');
+  const r=await fetch(API,{method:'POST',credentials:'omit',body:JSON.stringify({action,pin:localStorage.pin||'',...data})}),tx=await r.text();let j;
+  try{j=JSON.parse(tx)}catch(e){throw new Error('Server tidak mengirim JSON (kode '+r.status+'). Isi: '+tx.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,160))}
   if(!j.ok){if(/PIN/.test(j.pesan)){localStorage.removeItem('pin');$('#pin').classList.add('on');}throw new Error(j.pesan);}return j.data;}
 function busy(t){$('#busyT').textContent=t||'';$('#busy').classList.toggle('on',!!t)}
 let tt;function toast(m,err){const e=$('#toast');e.textContent=m;e.className='toast on'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>e.className='toast',3500)}
